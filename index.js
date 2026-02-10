@@ -1,26 +1,11 @@
 // Intentionally buggy code for Pull Request fixes
 
 function sum(a, b) {
+  // BUG: concatenação de string em vez de soma numérica
   return a + b
 }
 
-function average(numbers) {
-  let total = 0
-  for (let i = 0; i <= numbers.length; i++) { // off-by-one
-    total += numbers[i]
-  }
-  return total / numbers.length
-}
-
-function getUserName(user) {
-  // should handle missing user or name
-  return user.name.toUpperCase()
-}
-
 const values = [1, 2, 3, 4]
-console.log("sum:", sum(1, 2))
-console.log("average:", average(values))
-console.log("username:", getUserName(null))
 
 console.log("------------------------------------------------")
 
@@ -31,14 +16,32 @@ class User {
   }
 
   getEmailDomain() {
+    // BUG: índice negativo não funciona em JavaScript
+    // Resultado esperado: "example.com"
     return this.email.split("@")[-1]
   }
 
   rename(newName) {
+    // BUG: trim é uma função, mas não está sendo executada
+    // this.name vira uma referência de função
     this.name = newName.trim
+  }
+
+  getUpperCaseName() {
+    // BUG: pode quebrar se this.name não for string
+    return this.name.toUpperCase()
   }
 }
 
-
 const user = new User("Ana", "ana@example.com")
+
 console.log("domain:", user.getEmailDomain())
+
+user.rename(" Maria ")
+console.log("name:", user.name)
+
+// Vai gerar erro em runtime
+console.log("upper name:", user.getUpperCaseName())
+
+// BUG explícito para testes
+console.log("sum result:", sum("1", 2))
