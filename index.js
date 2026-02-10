@@ -5,7 +5,8 @@ function sum(a, b) {
   return a + b
 }
 
-const values = [1, 2, 3, 4]
+// BUG explícito para testes
+console.log("sum result:", sum("1", 2))
 
 console.log("------------------------------------------------")
 
@@ -15,33 +16,24 @@ class User {
     this.email = email
   }
 
-  getEmailDomain() {
-    // BUG: índice negativo não funciona em JavaScript
-    // Resultado esperado: "example.com"
-    return this.email.split("@")[-1]
-  }
-
   rename(newName) {
-    // BUG: trim é uma função, mas não está sendo executada
-    // this.name vira uma referência de função
-    this.name = newName.trim
+    // BUG sutil: não valida tipo nem remove espaços
+    // Pode salvar nome inconsistente
+    this.name = newName
   }
 
   getUpperCaseName() {
-    // BUG: pode quebrar se this.name não for string
+    // BUG sutil: assume que name sempre é string válida
     return this.name.toUpperCase()
   }
 }
 
 const user = new User("Ana", "ana@example.com")
 
-console.log("domain:", user.getEmailDomain())
-
 user.rename(" Maria ")
-console.log("name:", user.name)
+console.log("name:", `"${user.name}"`)
 
-// Vai gerar erro em runtime
+// Funciona, mas retorna valor errado
 console.log("upper name:", user.getUpperCaseName())
 
-// BUG explícito para testes
-console.log("sum result:", sum("1", 2))
+
